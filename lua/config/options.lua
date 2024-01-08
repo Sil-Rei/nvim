@@ -1,5 +1,7 @@
 local opt = vim.opt
 
+vim.opt.fillchars = {eob = " "}
+
 -- Tab / Indentation
 opt.tabstop = 2
 opt.shiftwidth = 2

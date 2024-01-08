@@ -7,16 +7,15 @@ local config = function()
 			theme = theme,
 			globalstatus = true,
 		},
-		tabline = {
-			
-		},
+		tabline = {},
 		sections = {
-		lualine_a = { "mode" },
-		lualine_b = { "branch" },
-    lualine_c = {"diagnostics"},
-		lualine_x = { "encoding", "filetype" },
-		lualine_y = { "progress" },
-		lualine_z = { "location" },},
+			lualine_a = { "mode" },
+			lualine_b = { "branch" },
+			lualine_c = { "diagnostics" },
+			lualine_x = { "encoding", "filetype" },
+			lualine_y = { "progress" },
+			lualine_z = { "location" },
+		},
 	})
 end
 

@@ -48,8 +48,10 @@ if vim.g.neovide then
 	vim.g.neovide_transparency = 1
 	vim.g.transparency = 1
 	vim.g.neovide_background_color = "#0f1117" .. alpha()
-  vim.g.neovide_padding_top = 10
-  vim.g.guifont = {":20"}
+	vim.g.neovide_padding_top = 10
+	vim.g.guifont = { ":20" }
 end
+
+vim.g.indent_blankline_filetype_exclude = { "dashboard" }
 
 require("lazy").setup("plugins", opts)

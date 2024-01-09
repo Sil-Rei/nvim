@@ -3,7 +3,9 @@ local keymap = vim.keymap -- for conciseness
 ---------------------
 -- General Keymaps
 ---------------------
-
+-- remap ctrl d/u to center screen as well
+keymap.set("n", "<C-u>", "<C-u>zz", {silent = true})
+keymap.set("n", "<C-d>", "<C-d>zz", {silent = true})
 -- use jk to exit insert mode
 keymap.set("i", "jk", "<ESC>")
 

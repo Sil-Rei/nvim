@@ -13,6 +13,13 @@ return {
 			definition_action_keys = {
 				edit = "<CR>",
 			},
+      lightbulb = {
+        enable = false,
+        enable_in_insert = false,
+        sign = false,
+        virtual_text = false,
+        debounce = 10,
+      }
 		})
 	end,
 	dependencies = {

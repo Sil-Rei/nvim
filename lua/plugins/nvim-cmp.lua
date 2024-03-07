@@ -58,6 +58,13 @@ return {
 				},
 			},
 		})
+
+  cmp.setup.filetype("html", {
+      sources = cmp.config.sources({
+        {name = "nvim_lsp", priority=30},
+        {name = "luasnip", priority=8},
+      })
+    })
 	end,dependencies = {
 		"onsails/lspkind.nvim",
 		{

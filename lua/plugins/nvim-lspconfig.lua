@@ -34,6 +34,18 @@ local config = function()
 		},
 	})
 
+  -- css
+  lspconfig.cssls.setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
+  })
+
+  -- HTML
+  lspconfig.html.setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
+  })
+
 	-- json
 	lspconfig.jsonls.setup({
 		capabilities = capabilities,
@@ -58,8 +70,6 @@ local config = function()
 		},
 	})
 
-
-
 	-- bash
 	lspconfig.bashls.setup({
 		capabilities = capabilities,
@@ -83,6 +93,7 @@ local config = function()
 			"typescriptreact",
 			"javascriptreact",
 			"javascript",
+      "typescript",
 			"css",
 			"sass",
 			"scss",
@@ -103,6 +114,14 @@ local config = function()
 		},
 		root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
 	})
+
+  -- Angular
+  lspconfig.angularls.setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
+    filetypes = {"typescriptreact", "html", "typescriptreact", "javascript", "javascriptreact"},
+    root_dir = lspconfig.util.root_pattern("angular.json", ".git"),
+  })
 
 	-- docker
 	lspconfig.dockerls.setup({

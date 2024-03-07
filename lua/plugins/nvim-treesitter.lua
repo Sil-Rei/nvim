@@ -1,3 +1,5 @@
+require("nvim-treesitter.install").prefer_git = true
+
 local config = function()
 	require("nvim-treesitter.configs").setup({
 		build = ":TSUpdate",

@@ -31,8 +31,8 @@ return {
 			end,
 			{ noremap = true },
 		},
-		-- {"<leader>mn", function() require('harpoon.ui').nav_next() end, {noremap = true}},
-		-- {"<leader>mp", function() require('harpoon.ui').nav_prev() end, {noremap = true}},
+		{"<leader>mn", function() require('harpoon.ui').nav_next() end, {noremap = true}},
+		{"<leader>mp", function() require('harpoon.ui').nav_prev() end, {noremap = true}},
 		{
 			"<leader>m1",
 			function()

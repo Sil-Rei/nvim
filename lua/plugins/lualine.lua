@@ -142,21 +142,27 @@ local green
 local yellow
 local red
 
-if vim.g.colors_name == 'nordic' then
-    local C = require 'nordic.colors'
-    text_hl = { fg = C.gray3 }
-    icon_hl = { fg = C.gray4 }
-    green = C.green.base
-    yellow = C.yellow.base
-    red = C.red.base
-elseif vim.g.colors_name == 'tokyonight' then
-    local C = require 'tokyonight.colors'
-    text_hl = { fg = C.default.fg_gutter }
-    icon_hl = { fg = C.default.dark3 }
-    green = C.default.green1
-    yellow = C.default.yellow
-    red = C.default.red1
-end
+-- if vim.g.colors_name == 'nordic' then
+--     local C = require 'nordic.colors'
+--     text_hl = { fg = C.gray3 }
+--     icon_hl = { fg = C.gray4 }
+--     green = C.green.base
+--     yellow = C.yellow.base
+--     red = C.red.base
+-- elseif vim.g.colors_name == 'tokyonight' then
+--     local C = require 'tokyonight.colors'
+--     text_hl = { fg = C.default.fg_gutter }
+--     icon_hl = { fg = C.default.dark3 }
+--     green = C.default.green1
+--     yellow = C.default.yellow
+--     red = C.default.red1
+-- end
+
+    text_hl = {fg = '#434C5E'}
+    icon_hl = {fg = '#4C566A'}
+    green ='#A3BE8C'
+    yellow = '#EBCB8B'
+    red = '#BF616A'
 
 local function is_recording() return vim.fn.reg_recording() ~= '' end
 

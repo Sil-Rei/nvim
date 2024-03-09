@@ -3,6 +3,7 @@ return {
     main = "ibl",
     lazy = false,
     opts = {
+      scope = {enabled=false},
       exclude = {
         filetypes = {
           "log",

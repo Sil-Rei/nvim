@@ -39,10 +39,10 @@ return {
 			}),
 			-- sources for autocompletion
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp", priority = 30 }, -- lsp
-				{ name = "luasnip", priority = 8 }, -- snippets
-				{ name = "buffer", priority = 7 }, -- text within current buffer
-				{ name = "path", priority = 7 }, -- file system paths
+				{ name = "nvim_lsp", priority=10}, -- lsp
+				{ name = "luasnip"}, -- snippets
+				{ name = "buffer"}, -- text within current buffer
+				{ name = "path"}, -- file system paths
 			}),
 			-- configure lspkind for vs-code like icons
 				formatting = {
@@ -54,6 +54,10 @@ return {
 			sorting = {
 				comparators = {
 					deprioritize_snippet, -- Add the deprioritize function
+          cmp.config.compare.offset,
+          cmp.config.compare.exact,
+          cmp.config.compare.score,
+          cmp.config.compare.kind,
 					-- other comparators can be added here
 				},
 			},

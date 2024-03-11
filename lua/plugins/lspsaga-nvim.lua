@@ -19,6 +19,10 @@ return {
         sign = false,
         virtual_text = false,
         debounce = 10,
+      },
+      symbol_in_winbar = {
+        enable = true,
+        show_file = true,
       }
 		})
 	end,

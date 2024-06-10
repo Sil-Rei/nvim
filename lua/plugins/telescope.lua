@@ -1,8 +1,6 @@
-
-
 local config = function()
 	local telescope = require("telescope")
-  telescope.load_extension("harpoon")
+	telescope.load_extension("harpoon")
 	telescope.setup({
 		defaults = {
 			mappings = {
@@ -23,7 +21,7 @@ local config = function()
 				previewer = true,
 			},
 			buffers = {
-				theme = "dropdown",
+			theme = "dropdown",
 				previewer = false,
 			},
 		},
@@ -32,9 +30,7 @@ end
 
 return {
 	"nvim-telescope/telescope.nvim",
-	tag = "0.1.3",
 	lazy = false,
 	dependencies = { "nvim-lua/plenary.nvim" },
 	config = config,
-
 }

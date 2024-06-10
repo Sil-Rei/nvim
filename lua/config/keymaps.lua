@@ -48,9 +48,8 @@ keymap.set("n", "<C-l>", "TmuxNavigateRight") -- Navigate Right (TmuxNavigateRig
 -- ToggleTerm
 keymap.set("n", "<C-i>", ":ToggleTerm<CR>", { noremap = true, silent = true }) -- open / close
 keymap.set({ "i", "v" }, "<C-i>", "<ESC>:ToggleTerm<CR>", { noremap = true, silent = true }) -- open / close
-keymap.set({"n", "t"}, "<leader>ä", "<cmd>resize +3<CR>", {noremap = true, silent = true})
-keymap.set({"n", "t"}, "<leader>ö", "<cmd>resize -2<CR>", {noremap = true, silent = true})
-
+keymap.set({ "n", "t" }, "<leader>ä", "<cmd>resize +3<CR>", { noremap = true, silent = true })
+keymap.set({ "n", "t" }, "<leader>ö", "<cmd>resize -2<CR>", { noremap = true, silent = true })
 
 -- vim-maximizer
 keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window maximization
@@ -74,3 +73,6 @@ keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>") -- list current c
 
 -- restart lsp server (not on youtube nvim video)
 keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
+
+-- Oil
+keymap.set("n", "<leader>ö", "<cmd>Oil<cr>")

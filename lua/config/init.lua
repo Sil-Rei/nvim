@@ -30,7 +30,7 @@ local opts = {
 			"netrwPlugin",
 			"tarPlugin",
 			"tohtml",
-			"tutor",
+			-- "tutor",
 			"zipPlugin",
 			"netrw",
 		},

@@ -7,10 +7,11 @@ return {
 				dotfiles = false,
 			},
      actions = {
-        open_file = {
-          resize_window = false,
-        }
-      }
+      --   open_file = {
+      --     resize_window = false,
+      --   }
+      },
+      view = {adaptive_size = true}
 
 		})
 	end,

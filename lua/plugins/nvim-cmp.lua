@@ -21,7 +21,6 @@ return {
 			end
 		end
 
-
 		cmp.setup({
 			snippet = {
 				expand = function(args)

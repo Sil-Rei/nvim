@@ -45,11 +45,6 @@ keymap.set("n", "<C-l>", "TmuxNavigateRight") -- Navigate Right (TmuxNavigateRig
 ----------------------
 -- Plugin Keybinds
 ----------------------
--- ToggleTerm
-keymap.set("n", "<C-i>", ":ToggleTerm<CR>", { noremap = true, silent = true }) -- open / close
-keymap.set({ "i", "v" }, "<C-i>", "<ESC>:ToggleTerm<CR>", { noremap = true, silent = true }) -- open / close
-keymap.set({ "n", "t" }, "<leader>ä", "<cmd>resize +3<CR>", { noremap = true, silent = true })
-keymap.set({ "n", "t" }, "<leader>ö", "<cmd>resize -2<CR>", { noremap = true, silent = true })
 
 -- vim-maximizer
 keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window maximization
@@ -60,8 +55,8 @@ keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", { noremap = true, silent = tr
 
 -- telescope
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
+keymap.set("n", "<leader>fc", "<cmd>Telescope neoclip<cr>") -- find files within current working directory, respects .gitignore
 keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>") -- find string in current working directory as you type
-keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>") -- find string under cursor in current working directory
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>") -- list open buffers in current neovim instance
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>") -- list available help tags
 

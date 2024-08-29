@@ -2,6 +2,10 @@ return {
   "RRethy/vim-illuminate",
   lazy = false,
   config = function()
-    require("illuminate").configure({})
+    require("illuminate").configure({
+      filetypes_denylist={
+        "NvimTree", "nvim-tree"
+      }
+    })
   end
 }

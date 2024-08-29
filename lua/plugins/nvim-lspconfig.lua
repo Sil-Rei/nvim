@@ -34,27 +34,34 @@ local config = function()
 		},
 	})
 
+	-- Prisma
+	lspconfig.prismals.setup({
+		capabilities = capabilities,
+		on_attach = on_attach,
+		filetypes = { "prisma" },
+		root_dir = lspconfig.util.root_pattern("schema.prisma", ".git"),
+	})
 
--- Angular
-lspconfig.angularls.setup{
-  on_attach = on_attach,
-  filetypes = {"typescriptreact", "html", "typescript", "javascript", "javascriptreact"},
-  root_dir = lspconfig.util.root_pattern("angular.json", ".git"),
-  capabilities = capabilities,
-  cmd = {"ngserver", "--typescript-path", "/opt/homebrew/lib/node_modules/typescript/lib"}
-}
+	-- Angular
+	lspconfig.angularls.setup({
+		on_attach = on_attach,
+		filetypes = { "typescriptreact", "html", "typescript", "javascript", "javascriptreact" },
+		root_dir = lspconfig.util.root_pattern("angular.json", ".git"),
+		capabilities = capabilities,
+		cmd = { "ngserver", "--typescript-path", "/opt/homebrew/lib/node_modules/typescript/lib" },
+	})
 
-  -- css
-  lspconfig.cssls.setup({
-    capabilities = capabilities,
-    on_attach = on_attach,
-  })
+	-- css
+	lspconfig.cssls.setup({
+		capabilities = capabilities,
+		on_attach = on_attach,
+	})
 
-  -- HTML
-  lspconfig.html.setup({
-    capabilities = capabilities,
-    on_attach = on_attach,
-  })
+	-- HTML
+	lspconfig.html.setup({
+		capabilities = capabilities,
+		on_attach = on_attach,
+	})
 
 	-- json
 	lspconfig.jsonls.setup({
@@ -103,12 +110,12 @@ lspconfig.angularls.setup{
 			"typescriptreact",
 			"javascriptreact",
 			"javascript",
-      "typescript",
+			"typescript",
 			"css",
 			"sass",
 			"scss",
-      "json",
-      "lua",
+			"json",
+			"lua",
 			"less",
 			"svelte",
 			"vue",
@@ -122,7 +129,7 @@ lspconfig.angularls.setup{
 			"typescript",
 			"typescriptreact", -- For TSX files
 			"javascript",
-			"javascriptreact" -- For JSX files
+			"javascriptreact", -- For JSX files
 		},
 		root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
 	})
@@ -138,6 +145,7 @@ lspconfig.angularls.setup{
 	local flake8 = require("efmls-configs.linters.flake8")
 	local black = require("efmls-configs.formatters.black")
 	local eslint_d = require("efmls-configs.linters.eslint_d")
+	local prettier = require("efmls-configs.formatters.prettier")
 	local prettierd = require("efmls-configs.formatters.prettier_d")
 	local fixjson = require("efmls-configs.formatters.fixjson")
 	local shellcheck = require("efmls-configs.linters.shellcheck")
@@ -178,7 +186,7 @@ lspconfig.angularls.setup{
 				lua = { luacheck, stylua },
 				python = { flake8, black },
 				typescript = { eslint_d, prettierd },
-				json = { eslint_d, fixjson },
+				json = { prettierd },
 				jsonc = { eslint_d, fixjson },
 				sh = { shellcheck, shfmt },
 				javascript = { eslint_d, prettierd },
@@ -191,6 +199,7 @@ lspconfig.angularls.setup{
 				solidity = { solhint },
 				html = { prettierd },
 				css = { prettierd },
+        prisma = {prettier}
 			},
 		},
 	})

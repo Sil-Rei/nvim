@@ -9,6 +9,13 @@ return {
 				package_pending = "➜",
 				package_uninstalled = "✗",
 			},
-		},
+		}, 
 	},
+  config = function()
+    require("mason").setup({
+  registries = {
+    "github:mason-org/mason-registry@2023-05-15-next-towel"
+  }
+    })
+  end
 }

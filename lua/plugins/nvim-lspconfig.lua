@@ -155,6 +155,7 @@ local config = function()
 
 	-- configure efm server
 	lspconfig.efm.setup({
+		root_dir = lspconfig.util.root_pattern(".git/", "."),
 		filetypes = {
 			"lua",
 			"python",
@@ -199,7 +200,7 @@ local config = function()
 				solidity = { solhint },
 				html = { prettierd },
 				css = { prettierd },
-        prisma = {prettier}
+				prisma = { prettier },
 			},
 		},
 	})

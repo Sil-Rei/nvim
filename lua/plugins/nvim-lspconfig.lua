@@ -43,13 +43,13 @@ local config = function()
 	})
 
 	-- Angular
-	lspconfig.angularls.setup({
-		on_attach = on_attach,
-		filetypes = { "typescriptreact", "html", "typescript", "javascript", "javascriptreact" },
-		root_dir = lspconfig.util.root_pattern("angular.json", ".git"),
-		capabilities = capabilities,
-		cmd = { "ngserver", "--typescript-path", "/opt/homebrew/lib/node_modules/typescript/lib" },
-	})
+	-- lspconfig.angularls.setup({
+	-- 	on_attach = on_attach,
+	-- 	filetypes = { "typescriptreact", "html", "typescript", "javascript", "javascriptreact" },
+	-- 	root_dir = lspconfig.util.root_pattern("angular.json", ".git"),
+	-- 	capabilities = capabilities,
+	-- 	cmd = { "ngserver", "--typescript-path", "/opt/homebrew/lib/node_modules/typescript/lib" },
+	-- })
 
 	-- css
 	lspconfig.cssls.setup({

@@ -1,6 +1,7 @@
 return {
 	"nvim-tree/nvim-tree.lua",
 	lazy = false,
+  enabled=false,
 	config = function()
 		require("nvim-tree").setup({
 			filters = {

@@ -71,3 +71,5 @@ keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if ne
 
 -- Oil
 keymap.set("n", "<leader>ö", "<cmd>Oil<cr>")
+
+

@@ -1,5 +1,9 @@
 local opt = vim.opt
 
+-- hide mode change notification
+vim.opt.showmode = false
+
+-- hide end of file chars
 vim.opt.fillchars = {eob = " "}
 
 -- Tab / Indentation

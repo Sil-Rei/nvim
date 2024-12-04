@@ -5,7 +5,7 @@ return {
 		local luasnip = require("luasnip")
 		local lspkind = require("lspkind")
 		local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-    local types = require("cmp.types")
+		local types = require("cmp.types")
 		cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 		require("luasnip/loaders/from_vscode").lazy_load()
 
@@ -38,13 +38,13 @@ return {
 			}),
 			-- sources for autocompletion
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp", priority=10}, -- lsp
-				{ name = "luasnip"}, -- snippets
-				{ name = "buffer"}, -- text within current buffer
-				{ name = "path"}, -- file system paths
+				{ name = "nvim_lsp", priority = 10 }, -- lsp
+				{ name = "luasnip" }, -- snippets
+				{ name = "buffer" }, -- text within current buffer
+				{ name = "path" }, -- file system paths
 			}),
 			-- configure lspkind for vs-code like icons
-				formatting = {
+			formatting = {
 				format = lspkind.cmp_format({
 					maxwidth = 50,
 					ellipsis_char = "...",
@@ -53,28 +53,26 @@ return {
 			sorting = {
 				comparators = {
 					deprioritize_snippet, -- Add the deprioritize function
-          cmp.config.compare.offset,
-          cmp.config.compare.exact,
-          cmp.config.compare.score,
-          cmp.config.compare.kind,
+					cmp.config.compare.offset,
+					cmp.config.compare.exact,
+					cmp.config.compare.score,
+					cmp.config.compare.kind,
 					-- other comparators can be added here
 				},
 			},
 		})
 
-  cmp.setup.filetype("html", {
-      sources = cmp.config.sources({
-        {name = "nvim_lsp", priority=30},
-        {name = "luasnip", priority=8},
-      })
-    })
-	end,dependencies = {
+		cmp.setup.filetype("html", {
+			sources = cmp.config.sources({
+				{ name = "nvim_lsp", priority = 30 },
+				{ name = "luasnip", priority = 8 },
+			}),
+		})
+	end,
+	dependencies = {
 		"onsails/lspkind.nvim",
 		{
-
 			"L3MON4D3/LuaSnip",
-			-- follow latest release.
-			version = "2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
 			-- install jsregexp (optional!).
 			build = "make install_jsregexp",
 		},

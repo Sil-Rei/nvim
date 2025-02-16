@@ -3,6 +3,7 @@ local opt = vim.opt
 -- hide mode change notification
 vim.opt.showmode = false
 
+vim.g.smart_splits_multiplexer_integration="wezterm"
 -- hide end of file chars
 vim.opt.fillchars = {eob = " "}
 

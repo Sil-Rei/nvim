@@ -3,6 +3,11 @@ local keymap = vim.keymap -- for conciseness
 ---------------------
 -- General Keymaps
 ---------------------
+-- remap gg to go to first character of line at top of file
+keymap.set("n", "gg", "gg0")
+-- remap G to go to last character of line at bottom of file
+keymap.set("n", "G", "G$")
+
 -- remap ctrl d/u to center screen as well
 keymap.set("n", "<C-u>", "<C-u>zz")
 keymap.set("n", "<C-d>", "<C-d>zz")
@@ -72,4 +77,18 @@ keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if ne
 -- Oil
 keymap.set("n", "<leader>ö", "<cmd>Oil<cr>")
 
-
+-- keymap.set('n', '<A-h>', require('smart-splits').resize_left)
+-- keymap.set('n', '<A-j>', require('smart-splits').resize_down)
+-- keymap.set('n', '<A-k>', require('smart-splits').resize_up)
+-- keymap.set('n', '<A-l>', require('smart-splits').resize_right)
+-- -- moving between splits
+-- keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+-- keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+-- keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+-- keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+-- keymap.set('n', '<C-\\>', require('smart-splits').move_cursor_previous)
+-- -- swapping buffers between windows
+-- keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
+-- keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
+-- keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
+-- keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)

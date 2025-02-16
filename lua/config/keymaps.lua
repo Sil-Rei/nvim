@@ -1,4 +1,4 @@
-local keymap = vim.keymap -- for conciseness
+local keymap = vim.keymap 
 
 ---------------------
 -- General Keymaps
@@ -34,61 +34,15 @@ keymap.set("n", "x", '"_x')
 -- increment/decrement numbers
 keymap.set("n", "<leader>+", "<C-a>") -- increment
 keymap.set("n", "<leader>-", "<C-x>") -- decrement
--- Pane and Window Navigation
-keymap.set("n", "<C-h>", "<C-w>h") -- Navigate Left
-keymap.set("n", "<S-M-j>", "<C-w>j") -- Navigate Down
-keymap.set("n", "<S-M-k>", "<C-w>k") -- Navigate Up
-keymap.set("n", "<C-l>", "<C-w>l") -- Navigate Right
-keymap.set("t", "<C-h>", "<C-w>h") -- Navigate Left (in terminal mode)
-keymap.set("t", "<C-j>", "<C-w>j") -- Navigate Down (in terminal mode)
-keymap.set("t", "<C-k>", "<C-w>k") -- Navigate Up (in terminal mode)
-keymap.set("t", "<C-l>", "<C-w>l") -- Navigate Right (in terminal mode)
-keymap.set("n", "<C-h>", "TmuxNavigateLeft") -- Navigate Left (TmuxNavigateLeft)
-keymap.set("n", "<C-j>", "TmuxNavigateDown") -- Navigate Down (TmuxNavigateDown)
-keymap.set("n", "<C-k>", "TmuxNavigateUp") -- Navigate Up (TmuxNavigateUp)
-keymap.set("n", "<C-l>", "TmuxNavigateRight") -- Navigate Right (TmuxNavigateRight)
 ----------------------
 -- Plugin Keybinds
 ----------------------
-
--- vim-maximizer
-keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window maximization
-
 -- nvim-tree
 keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true }) -- toggle file explorer
 keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", { noremap = true, silent = true })
 
--- telescope
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
-keymap.set("n", "<leader>fc", "<cmd>Telescope neoclip<cr>") -- find files within current working directory, respects .gitignore
-keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>") -- find string in current working directory as you type
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>") -- list open buffers in current neovim instance
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>") -- list available help tags
-
--- telescope git commands (not on youtube nvim video)
-keymap.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>") -- list all git commits (use <cr> to checkout) ["gc" for git commits]
-keymap.set("n", "<leader>gfc", "<cmd>Telescope git_bcommits<cr>") -- list git commits for current file/buffer (use <cr> to checkout) ["gfc" for git file commits]
-keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>") -- list git branches (use <cr> to checkout) ["gb" for git branch]
-keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>") -- list current changes per file with diff preview ["gs" for git status]
-
--- restart lsp server (not on youtube nvim video)
-keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
+-- restart lsp server
+keymap.set("n", "<leader>rs", ":LspRestart<CR>")
 
 -- Oil
 keymap.set("n", "<leader>ö", "<cmd>Oil<cr>")
-
--- keymap.set('n', '<A-h>', require('smart-splits').resize_left)
--- keymap.set('n', '<A-j>', require('smart-splits').resize_down)
--- keymap.set('n', '<A-k>', require('smart-splits').resize_up)
--- keymap.set('n', '<A-l>', require('smart-splits').resize_right)
--- -- moving between splits
--- keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
--- keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
--- keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
--- keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
--- keymap.set('n', '<C-\\>', require('smart-splits').move_cursor_previous)
--- -- swapping buffers between windows
--- keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
--- keymap.set('n', '<leader><leader>j', require('smart-splits').swap_buf_down)
--- keymap.set('n', '<leader><leader>k', require('smart-splits').swap_buf_up)
--- keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)

@@ -26,8 +26,8 @@ local config = function()
 				workspace = {
 					-- make language server aware of runtime files
 					library = {
-						vim.fn.expand("$VIMRUNTIME/lua") ,
-						vim.fn.stdpath("config") .. "/lua" 
+						vim.fn.expand("$VIMRUNTIME/lua"),
+						vim.fn.stdpath("config") .. "/lua",
 					},
 				},
 			},
@@ -42,14 +42,34 @@ local config = function()
 		root_dir = lspconfig.util.root_pattern("schema.prisma", ".git"),
 	})
 
+	local ok, mason_registry = pcall(require, "mason-registry")
+	if not ok then
+		vim.notify("mason-registry could not be loaded")
+		return
+	end
+	local angularls_path = mason_registry.get_package("angular-language-server"):get_install_path()
+	local cmd = {
+		"ngserver",
+		"--stdio",
+		"--tsProbeLocations",
+		table.concat({
+			angularls_path,
+			vim.uv.cwd(),
+		}, ","),
+		"--ngProbeLocations",
+		table.concat({
+			angularls_path .. "/node_modules/@angular/language-server",
+			vim.uv.cwd(),
+		}, ","),
+	}
 	-- Angular
-	-- lspconfig.angularls.setup({
-	-- 	on_attach = on_attach,
-	-- 	filetypes = { "typescriptreact", "html", "typescript", "javascript", "javascriptreact" },
-	-- 	root_dir = lspconfig.util.root_pattern("angular.json", ".git"),
-	-- 	capabilities = capabilities,
-	-- 	cmd = { "ngserver", "--typescript-path", "/opt/homebrew/lib/node_modules/typescript/lib" },
-	-- })
+	lspconfig.angularls.setup({
+		on_attach = on_attach,
+		filetypes = { "typescriptreact", "html", "typescript", "javascript", "javascriptreact" },
+		root_dir = lspconfig.util.root_pattern("angular.json", ".git"),
+		capabilities = capabilities,
+		cmd = cmd,
+	})
 
 	-- css
 	lspconfig.cssls.setup({
@@ -186,20 +206,20 @@ local config = function()
 			languages = {
 				lua = { luacheck, stylua },
 				python = { flake8, black },
-				typescript = { eslint_d, prettierd },
+				typescript = { eslint_d, prettier },
 				json = { prettierd },
 				jsonc = { eslint_d, fixjson },
 				sh = { shellcheck, shfmt },
-				javascript = { eslint_d, prettierd },
-				javascriptreact = { eslint_d, prettierd },
-				typescriptreact = { eslint_d, prettierd },
+				javascript = { eslint_d, prettier },
+				javascriptreact = { eslint_d, prettier },
+				typescriptreact = { eslint_d, prettier },
 				svelte = { eslint_d, prettierd },
 				vue = { eslint_d, prettierd },
 				markdown = { prettierd },
 				docker = { hadolint, prettierd },
 				solidity = { solhint },
-				html = { prettierd },
-				css = { prettierd },
+				html = { prettier },
+				css = { prettier },
 				prisma = { prettier },
 			},
 		},

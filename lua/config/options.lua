@@ -5,6 +5,8 @@ vim.opt.showmode = false
   vim.diagnostic.config({
       severity_sort = true,
     })
+
+
 vim.g.smart_splits_multiplexer_integration="wezterm"
 -- hide end of file chars
 vim.opt.fillchars = {eob = " "}

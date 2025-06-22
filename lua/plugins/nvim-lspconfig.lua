@@ -42,14 +42,32 @@ local config = function()
 		root_dir = lspconfig.util.root_pattern("schema.prisma", ".git"),
 	})
 
+	local ok, mason_registry = pcall(require, "mason-registry")
+	if not ok then
+		vim.notify("mason-registry could not be loaded")
+		return
+	end
+	local angularls_path = mason_registry.get_package("angular-language-server"):get_install_path()
+	local cmd = {
+		"ngserver",
+		"--stdio",
+		"--tsProbeLocations",
+		table.concat({
+			angularls_path,
+			vim.uv.cwd(),
+		}, ","),
+		"--ngProbeLocations",
+		table.concat({
+			angularls_path .. "/node_modules/@angular/language-server",
+			vim.uv.cwd(),
+		}, ","),
+	}
 	-- Angular
 	lspconfig.angularls.setup({
 		capabilities = capabilities,
 		on_attach = on_attach,
 		filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
 		root_dir = lspconfig.util.root_pattern("angular.json", "project.json", ".git"),
-	})
-
 	-- css
 	lspconfig.cssls.setup({
 		capabilities = capabilities,
@@ -185,22 +203,32 @@ local config = function()
 		settings = {
 			languages = {
 				lua = { luacheck, stylua },
+<<<<<<< HEAD
 				python = { black },
 				typescript = { eslint_d, prettierd },
+=======
+				python = { flake8, black },
+				typescript = { eslint_d, prettier },
+>>>>>>> e9951739632c5270bfa3adfaa61e9e046c4d067e
 				json = { prettierd },
 				jsonc = { eslint_d, fixjson },
 				sh = { shellcheck, shfmt },
-				javascript = { eslint_d, prettierd },
-				javascriptreact = { eslint_d, prettierd },
-				typescriptreact = { eslint_d, prettierd },
+				javascript = { eslint_d, prettier },
+				javascriptreact = { eslint_d, prettier },
+				typescriptreact = { eslint_d, prettier },
 				svelte = { eslint_d, prettierd },
 				vue = { eslint_d, prettierd },
 				markdown = { prettierd },
 				docker = { hadolint, prettierd },
 				solidity = { solhint },
+<<<<<<< HEAD
 				html = { prettierd },
 				css = { prettierd },
 				scss = { prettierd },
+=======
+				html = { prettier },
+				css = { prettier },
+>>>>>>> e9951739632c5270bfa3adfaa61e9e046c4d067e
 				prisma = { prettier },
 			},
 		},

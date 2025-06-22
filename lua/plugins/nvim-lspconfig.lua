@@ -26,8 +26,8 @@ local config = function()
 				workspace = {
 					-- make language server aware of runtime files
 					library = {
-						vim.fn.expand("$VIMRUNTIME/lua") ,
-						vim.fn.stdpath("config") .. "/lua" 
+						vim.fn.expand("$VIMRUNTIME/lua"),
+						vim.fn.stdpath("config") .. "/lua",
 					},
 				},
 			},
@@ -43,13 +43,12 @@ local config = function()
 	})
 
 	-- Angular
-	-- lspconfig.angularls.setup({
-	-- 	on_attach = on_attach,
-	-- 	filetypes = { "typescriptreact", "html", "typescript", "javascript", "javascriptreact" },
-	-- 	root_dir = lspconfig.util.root_pattern("angular.json", ".git"),
-	-- 	capabilities = capabilities,
-	-- 	cmd = { "ngserver", "--typescript-path", "/opt/homebrew/lib/node_modules/typescript/lib" },
-	-- })
+	lspconfig.angularls.setup({
+		capabilities = capabilities,
+		on_attach = on_attach,
+		filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
+		root_dir = lspconfig.util.root_pattern("angular.json", "project.json", ".git"),
+	})
 
 	-- css
 	lspconfig.cssls.setup({
@@ -173,6 +172,7 @@ local config = function()
 			"solidity",
 			"html",
 			"css",
+      "scss"
 		},
 		init_options = {
 			documentFormatting = true,
@@ -185,7 +185,7 @@ local config = function()
 		settings = {
 			languages = {
 				lua = { luacheck, stylua },
-				python = { flake8, black },
+				python = { black },
 				typescript = { eslint_d, prettierd },
 				json = { prettierd },
 				jsonc = { eslint_d, fixjson },
@@ -200,6 +200,7 @@ local config = function()
 				solidity = { solhint },
 				html = { prettierd },
 				css = { prettierd },
+				scss = { prettierd },
 				prisma = { prettier },
 			},
 		},

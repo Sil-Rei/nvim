@@ -16,7 +16,7 @@ keymap.set("i", "jk", "<ESC>")
 
 -- Quit without saving
 keymap.set("n", "<leader><ESC>", ":qa!<CR>") -- Quit all without saving
-keymap.set("v", "<leader><ESC>", ":qa!<CR>") -- Quit all without saving
+keymap.set("v", "<leader><ESC>", "<Esc>:qa!<CR>", { desc = "Quit all without saving" })
 
 -- quick save write file
 keymap.set("n", "<leader>w", ":w<CR>")

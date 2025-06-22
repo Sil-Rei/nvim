@@ -68,6 +68,7 @@ local config = function()
 		on_attach = on_attach,
 		filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
 		root_dir = lspconfig.util.root_pattern("angular.json", "project.json", ".git"),
+  })
 	-- css
 	lspconfig.cssls.setup({
 		capabilities = capabilities,
@@ -203,13 +204,8 @@ local config = function()
 		settings = {
 			languages = {
 				lua = { luacheck, stylua },
-<<<<<<< HEAD
-				python = { black },
-				typescript = { eslint_d, prettierd },
-=======
 				python = { flake8, black },
 				typescript = { eslint_d, prettier },
->>>>>>> e9951739632c5270bfa3adfaa61e9e046c4d067e
 				json = { prettierd },
 				jsonc = { eslint_d, fixjson },
 				sh = { shellcheck, shfmt },
@@ -221,14 +217,9 @@ local config = function()
 				markdown = { prettierd },
 				docker = { hadolint, prettierd },
 				solidity = { solhint },
-<<<<<<< HEAD
 				html = { prettierd },
 				css = { prettierd },
 				scss = { prettierd },
-=======
-				html = { prettier },
-				css = { prettier },
->>>>>>> e9951739632c5270bfa3adfaa61e9e046c4d067e
 				prisma = { prettier },
 			},
 		},

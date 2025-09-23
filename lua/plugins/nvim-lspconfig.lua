@@ -1,4 +1,3 @@
--- ~/.config/nvim/lua/plugins/lsp.lua
 local on_attach = require("util.lsp").on_attach
 
 local config = function()
@@ -32,6 +31,10 @@ local config = function()
   -- Globale Defaults
   vim.lsp.config("*", {
     on_attach = on_attach,
+    capabilities = (function()
+      local ok, blink = pcall(require, "blink.cmp")
+      return ok and blink.get_lsp_capabilities() or nil
+    end)(),
   })
 
   -- lua_ls
@@ -57,7 +60,7 @@ local config = function()
 
   -- Angular
   vim.lsp.config("angularls", {
-    filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
+    filetypes = { "html" },
     root_markers = { { "angular.json", "project.json" }, ".git" },
   })
 
@@ -114,14 +117,51 @@ local config = function()
   })
 
   -- TypeScript/JavaScript
-  vim.lsp.config("ts_ls", {
+  vim.lsp.config("vtsls", {
     filetypes = {
       "typescript",
       "typescriptreact",
       "javascript",
       "javascriptreact",
     },
-    root_markers = { { "package.json", "tsconfig.json" }, ".git" },
+    root_markers = {
+      { "pnpm-workspace.yaml", "yarn.workspaces.json", "package.json", "tsconfig.json" },
+      ".git",
+    },
+    settings = {
+      vtsls = {
+        enableMoveToFileCodeAction = true,
+        autoUseWorkspaceTsdk = true,
+      },
+      typescript = {
+        inlayHints = {
+          enumMemberValues = true,
+          functionLikeReturnTypes = true,
+          parameterNames = { enabled = "literals" },
+          parameterTypes = true,
+          propertyDeclarationTypes = true,
+          variableTypes = { enabled = "literals" },
+        },
+        preferences = {
+          includeCompletionsForModuleExports = true,
+          includeCompletionsWithInsertTextCompletions = true,
+          quoteStyle = "auto",
+          importModuleSpecifierPreference = "non-relative",
+        },
+        suggest = {
+          completeFunctionCalls = true,
+        },
+      },
+      javascript = {
+        inlayHints = {
+          parameterNames = { enabled = "literals" },
+          parameterTypes = true,
+        },
+      },
+      tsserver = {
+        useSyntaxServer = "auto",
+      },
+    },
   })
 
   -- ESLint
@@ -151,7 +191,7 @@ local config = function()
     "bashls",
     "solidity",
     "emmet_ls",
-    "ts_ls",
+    "vtsls",
     "eslint",
     "dockerls",
   })

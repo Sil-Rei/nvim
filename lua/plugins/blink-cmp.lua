@@ -18,11 +18,6 @@ return {
       ["<Tab>"] = { "accept", "fallback" },
     },
 
-    signature = {
-      enabled = true,
-      window = {border = "none"}
-    },
-
     appearance = {
       nerd_font_variant = "mono",
     },

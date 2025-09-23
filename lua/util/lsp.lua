@@ -1,27 +1,51 @@
-local mapkey = require("util.keymapper").mapkey
-
 local M = {}
 
--- set keymaps on the active lsp server
 M.on_attach = function(client, bufnr)
-	local opts = { noremap = true, silent = true, buffer = bufnr }
+  local function map(mode, lhs, rhs, desc)
+    vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true, noremap = true, desc = desc })
+  end
 
-	mapkey("<leader>fd", "Lspsaga finder", "n", opts) -- go to definition
-	mapkey("gd", "Lspsaga peek_definition", "n", opts) -- peak definition
-	mapkey("gD", "Lspsaga goto_definition", "n", opts) -- go to definition
-	mapkey("<leader>ca", "Lspsaga code_action", "n", opts) -- see available code actions
-	mapkey("<leader>rn", "Lspsaga rename", "n", opts) -- smart rename
-	mapkey("<leader>D", "Lspsaga show_line_diagnostics", "n", opts) -- show  diagnostics for line
-	mapkey("<leader>d", "Lspsaga show_cursor_diagnostics", "n", opts) -- show diagnostics for cursor
-	mapkey("<leader>pd", "Lspsaga diagnostic_jump_prev", "n", opts) -- jump to prev diagnostic in buffer
-	mapkey("<leader>nd", "Lspsaga diagnostic_jump_next", "n", opts) -- jump to next diagnostic in buffer
-	mapkey("K", "Lspsaga hover_doc", "n", opts) -- show documentation for what is under cursor
+  local ok_snacks, Snacks = pcall(require, "snacks")
+  local P = ok_snacks and Snacks.picker or nil
 
-	if client.name == "pyright" then
-		mapkey("<Leader>oi", "PyrightOrganizeImports", "n", opts)
-	end
-end
+  map("n", "gd", function()
+    if P and P.lsp_definitions then P.lsp_definitions() else vim.lsp.buf.definition() end
+  end, "Goto Definition")
 
-M.diagnostic_signs = { Error = " ", Warn = " ", Hint = " ", Info = "" }
+  map("n", "gD", vim.lsp.buf.definition, "Goto Definition (direct)")
+
+  map("n", "gr", function()
+    if P and P.lsp_references then P.lsp_references() else vim.lsp.buf.references() end
+  end, "References")
+
+  map("n", "gI", function()
+    if P and P.lsp_implementations then P.lsp_implementations() else vim.lsp.buf.implementation() end
+  end, "Implementations")
+
+  map("n", "gy", function()
+    if P and P.lsp_type_definitions then P.lsp_type_definitions() else vim.lsp.buf.type_definition() end
+  end, "Type Definitions")
+
+  -- Code Action / Rename
+  map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
+  map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
+
+  -- Diagnostics (Saga -> native)
+map("n", "<leader>d", function()
+  vim.diagnostic.open_float(nil, {
+    scope = "line",
+    border = "rounded",
+  })
+end, "Line Diagnostics")
+
+  -- Hover
+  map("n", "K", vim.lsp.buf.hover, "Hover")
+
+  -- Optional: Diagnostics Liste im Picker
+  map("n", "<leader>sd", function()
+    if P and P.diagnostics then P.diagnostics() else vim.diagnostic.setloclist() end
+  end, "Diagnostics Picker")
+
+  end
 
 return M

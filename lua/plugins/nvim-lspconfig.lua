@@ -1,5 +1,4 @@
 local on_attach = require("util.lsp").on_attach
-local diagnostic_signs = require("util.lsp").diagnostic_signs
 
 local config = function()
   pcall(function()
@@ -8,13 +7,14 @@ local config = function()
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-  -- Diagnostics: moderne Sign-Konfig
+  -- Diagnostics: Zeichen, ohne numhl-Boolean
   local signs = {
-    Error = diagnostic_signs.Error or "",
-    Warn = diagnostic_signs.Warn or "",
-    Hint = diagnostic_signs.Hint or "",
-    Info = diagnostic_signs.Info or "",
+    Error = "",
+    Warn = "",
+    Hint = "",
+    Info = "",
   }
+
   vim.diagnostic.config({
     signs = {
       text = {
@@ -23,16 +23,19 @@ local config = function()
         [vim.diagnostic.severity.HINT] = signs.Hint,
         [vim.diagnostic.severity.INFO] = signs.Info,
       },
-      numhl = false,
+      -- numhl weglassen (kein boolean mehr setzen)
     },
+    virtual_text = { spacing = 2, prefix = "●" },
+    float = { border = "rounded", focusable = true },
+    severity_sort = true,
+    update_in_insert = false,
   })
 
-  -- Defaults für alle Server
+  -- Globale Defaults
   vim.lsp.config("*", {
     capabilities = capabilities,
     on_attach = on_attach,
   })
-
   -- lua_ls
   vim.lsp.config("lua_ls", {
     settings = {

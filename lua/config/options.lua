@@ -7,6 +7,8 @@ vim.opt.showmode = false
     })
 
 
+vim.g.indent_blankline_filetype_exclude = { "dashboard" }
+
 vim.g.smart_splits_multiplexer_integration="wezterm"
 -- hide end of file chars
 vim.opt.fillchars = {eob = " "}

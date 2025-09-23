@@ -3,7 +3,7 @@ return {
   lazy=false,
   priority=1000,
   config = function ()
-    require("nordic").load() -- Lädt das nordic Farbschema
+    require("nordic").load()
 
     -- Nachträgliche Anpassung
     vim.cmd [[

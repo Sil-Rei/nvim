@@ -2,10 +2,7 @@ local opt = vim.opt
 
 -- hide mode change notification
 vim.opt.showmode = false
-  vim.diagnostic.config({
-      severity_sort = true,
-    })
-
+vim.g.indent_blankline_filetype_exclude = { "dashboard" }
 
 vim.g.smart_splits_multiplexer_integration="wezterm"
 -- hide end of file chars
@@ -35,7 +32,6 @@ opt.scrolloff = 10
 opt.completeopt = "menuone,noinsert,noselect"
 
 -- Behaviour
-opt.hidden = true
 opt.errorbells = false
 opt.swapfile = false
 opt.backup = false
@@ -46,12 +42,9 @@ opt.splitright = true
 opt.splitbelow = true
 opt.autochdir = false
 opt.iskeyword:append("-")
-opt.mouse:append("a")
-opt.clipboard:append("unnamedplus")
-opt.modifiable = true
-opt.guicursor =
-	"n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
-opt.encoding = "UTF-8"
+opt.mouse = "a"
+opt.clipboard = "unnamedplus"
 vim.o.laststatus = 3
 
-vim.opt.guicursor = "n-v-c:block-blinkon1,i-ci-ve:ver25-blinkon1,r-cr:hor20,o:hor50"
+opt.guicursor =
+  "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250"

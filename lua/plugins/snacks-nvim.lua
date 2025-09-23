@@ -5,6 +5,7 @@ return {
 	opts = {
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
+		indent = { enabled = true, animate = { enabled = false } },
 		picker = { enabled = true },
 		dashboard = {
 			enabled = true,

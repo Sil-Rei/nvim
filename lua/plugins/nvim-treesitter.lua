@@ -8,11 +8,11 @@ return {
 	config = function()
 		require("nvim-treesitter.configs").setup({
 			indent = { enable = true },
-			autotag = { enable = true },
 			ensure_installed = {
 				"markdown",
 				"json",
 				"javascript",
+        "tsx",
 				"typescript",
 				"yaml",
 				"html",

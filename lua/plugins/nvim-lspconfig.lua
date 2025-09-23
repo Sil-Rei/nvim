@@ -1,3 +1,4 @@
+-- ~/.config/nvim/lua/plugins/lsp.lua
 local on_attach = require("util.lsp").on_attach
 
 local config = function()
@@ -5,9 +6,7 @@ local config = function()
     require("neoconf").setup({})
   end)
 
-  local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-  -- Diagnostics: Zeichen, ohne numhl-Boolean
+  -- Diagnostics
   local signs = {
     Error = "",
     Warn = "",
@@ -23,7 +22,6 @@ local config = function()
         [vim.diagnostic.severity.HINT] = signs.Hint,
         [vim.diagnostic.severity.INFO] = signs.Info,
       },
-      -- numhl weglassen (kein boolean mehr setzen)
     },
     virtual_text = { spacing = 2, prefix = "●" },
     float = { border = "rounded", focusable = true },
@@ -33,9 +31,9 @@ local config = function()
 
   -- Globale Defaults
   vim.lsp.config("*", {
-    capabilities = capabilities,
     on_attach = on_attach,
   })
+
   -- lua_ls
   vim.lsp.config("lua_ls", {
     settings = {
@@ -68,7 +66,7 @@ local config = function()
   vim.lsp.config("html", {})
   vim.lsp.config("jsonls", { filetypes = { "json", "jsonc" } })
 
-  -- Python (pyright für Typen)
+  -- Python (pyright)
   vim.lsp.config("pyright", {
     settings = {
       pyright = {
@@ -83,11 +81,11 @@ local config = function()
     },
   })
 
-  -- Ruff LSP (Linting/Format-Hinweise für Python)
+  -- Ruff
   vim.lsp.config("ruff_lsp", {
     init_options = {
       settings = {
-        args = {}, -- optional: z. B. { "--line-length=100" }
+        args = {},
       },
     },
   })
@@ -115,7 +113,7 @@ local config = function()
     },
   })
 
-  -- TypeScript/JavaScript (ts_ls)
+  -- TypeScript/JavaScript
   vim.lsp.config("ts_ls", {
     filetypes = {
       "typescript",
@@ -126,7 +124,7 @@ local config = function()
     root_markers = { { "package.json", "tsconfig.json" }, ".git" },
   })
 
-  -- ESLint LSP (Linting für JS/TS/React, abhängig von Projekt-ESLint-Config)
+  -- ESLint
   vim.lsp.config("eslint", {
     root_markers = {
       ".eslintrc",
@@ -164,10 +162,6 @@ return {
   config = config,
   lazy = false,
   dependencies = {
-    "windwp/nvim-autopairs",
     "williamboman/mason.nvim",
-    "hrsh7th/nvim-cmp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-nvim-lsp",
   },
 }

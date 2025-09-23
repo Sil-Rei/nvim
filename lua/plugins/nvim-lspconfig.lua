@@ -2,226 +2,169 @@ local on_attach = require("util.lsp").on_attach
 local diagnostic_signs = require("util.lsp").diagnostic_signs
 
 local config = function()
-	require("neoconf").setup({})
-	local cmp_nvim_lsp = require("cmp_nvim_lsp")
-	local lspconfig = require("lspconfig")
+  pcall(function()
+    require("neoconf").setup({})
+  end)
 
-	for type, icon in pairs(diagnostic_signs) do
-		local hl = "DiagnosticSign" .. type
-		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-	end
+  local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-	local capabilities = cmp_nvim_lsp.default_capabilities()
-
-	-- lua
-	lspconfig.lua_ls.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		settings = { -- custom settings for lua
-			Lua = {
-				-- make the language server recognize "vim" global
-				diagnostics = {
-					globals = { "vim" },
-				},
-				workspace = {
-					-- make language server aware of runtime files
-					library = {
-						vim.fn.expand("$VIMRUNTIME/lua"),
-						vim.fn.stdpath("config") .. "/lua",
-					},
-				},
-			},
-		},
-	})
-
-	-- Prisma
-	lspconfig.prismals.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = { "prisma" },
-		root_dir = lspconfig.util.root_pattern("schema.prisma", ".git"),
-	})
-
-	local ok, mason_registry = pcall(require, "mason-registry")
-	if not ok then
-		vim.notify("mason-registry could not be loaded")
-		return
-	end
-
-	-- Angular
-	lspconfig.angularls.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
-		root_dir = lspconfig.util.root_pattern("angular.json", "project.json", ".git"),
+  -- Diagnostics: moderne Sign-Konfig
+  local signs = {
+    Error = diagnostic_signs.Error or "",
+    Warn = diagnostic_signs.Warn or "",
+    Hint = diagnostic_signs.Hint or "",
+    Info = diagnostic_signs.Info or "",
+  }
+  vim.diagnostic.config({
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = signs.Error,
+        [vim.diagnostic.severity.WARN] = signs.Warn,
+        [vim.diagnostic.severity.HINT] = signs.Hint,
+        [vim.diagnostic.severity.INFO] = signs.Info,
+      },
+      numhl = false,
+    },
   })
-	-- css
-	lspconfig.cssls.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-	})
 
-	-- HTML
-	lspconfig.html.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-	})
+  -- Defaults für alle Server
+  vim.lsp.config("*", {
+    capabilities = capabilities,
+    on_attach = on_attach,
+  })
 
-	-- json
-	lspconfig.jsonls.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = { "json", "jsonc" },
-	})
+  -- lua_ls
+  vim.lsp.config("lua_ls", {
+    settings = {
+      Lua = {
+        diagnostics = { globals = { "vim" } },
+        workspace = {
+          library = {
+            vim.fn.expand("$VIMRUNTIME/lua"),
+            vim.fn.stdpath("config") .. "/lua",
+          },
+        },
+      },
+    },
+  })
 
-	-- python
-	lspconfig.pyright.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		settings = {
-			pyright = {
-				disableOrganizeImports = false,
-				analysis = {
-					useLibraryCodeForTypes = true,
-					autoSearchPaths = true,
-					diagnosticMode = "workspace",
-					autoImportCompletions = true,
-				},
-			},
-		},
-	})
+  -- Prisma
+  vim.lsp.config("prismals", {
+    filetypes = { "prisma" },
+    root_markers = { { "schema.prisma" }, ".git" },
+  })
 
-	-- bash
-	lspconfig.bashls.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = { "sh" },
-	})
+  -- Angular
+  vim.lsp.config("angularls", {
+    filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
+    root_markers = { { "angular.json", "project.json" }, ".git" },
+  })
 
-	-- solidity
-	lspconfig.solidity.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = { "solidity" },
-	})
+  -- CSS / HTML / JSON
+  vim.lsp.config("cssls", {})
+  vim.lsp.config("html", {})
+  vim.lsp.config("jsonls", { filetypes = { "json", "jsonc" } })
 
-	-- html, typescriptreact, javascriptreact, css, sass, scss, less, svelte, vue
-	lspconfig.emmet_ls.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = {
-			"html",
-			"typescriptreact",
-			"javascriptreact",
-			"javascript",
-			"typescript",
-			"css",
-			"sass",
-			"scss",
-			"json",
-			"lua",
-			"less",
-			"svelte",
-			"vue",
-		},
-	})
+  -- Python (pyright für Typen)
+  vim.lsp.config("pyright", {
+    settings = {
+      pyright = {
+        disableOrganizeImports = false,
+        analysis = {
+          useLibraryCodeForTypes = true,
+          autoSearchPaths = true,
+          diagnosticMode = "workspace",
+          autoImportCompletions = true,
+        },
+      },
+    },
+  })
 
-	lspconfig.ts_ls.setup({
-		on_attach = on_attach,
-		capabilities = capabilities,
-		filetypes = {
-			"typescript",
-			"typescriptreact", -- For TSX files
-			"javascript",
-			"javascriptreact", -- For JSX files
-		},
-		root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
-	})
+  -- Ruff LSP (Linting/Format-Hinweise für Python)
+  vim.lsp.config("ruff_lsp", {
+    init_options = {
+      settings = {
+        args = {}, -- optional: z. B. { "--line-length=100" }
+      },
+    },
+  })
 
-	-- docker
-	lspconfig.dockerls.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-	})
+  -- Bash
+  vim.lsp.config("bashls", { filetypes = { "sh" } })
 
-	local luacheck = require("efmls-configs.linters.luacheck")
-	local stylua = require("efmls-configs.formatters.stylua")
-	local flake8 = require("efmls-configs.linters.flake8")
-	local black = require("efmls-configs.formatters.black")
-	local eslint_d = require("efmls-configs.linters.eslint_d")
-	local prettier = require("efmls-configs.formatters.prettier")
-	local prettierd = require("efmls-configs.formatters.prettier_d")
-	local fixjson = require("efmls-configs.formatters.fixjson")
-	local shellcheck = require("efmls-configs.linters.shellcheck")
-	local shfmt = require("efmls-configs.formatters.shfmt")
-	local hadolint = require("efmls-configs.linters.hadolint")
-	local solhint = require("efmls-configs.linters.solhint")
+  -- Solidity
+  vim.lsp.config("solidity", { filetypes = { "solidity" } })
 
-	-- configure efm server
-	lspconfig.efm.setup({
-		root_dir = lspconfig.util.root_pattern(".git/", "."),
-		filetypes = {
-			"lua",
-			"python",
-			"json",
-			"jsonc",
-			"sh",
-			"javascript",
-			"javascriptreact",
-			"typescript",
-			"typescriptreact",
-			"svelte",
-			"vue",
-			"markdown",
-			"docker",
-			"solidity",
-			"html",
-			"css",
-      "scss"
-		},
-		init_options = {
-			documentFormatting = true,
-			documentRangeFormatting = true,
-			hover = true,
-			documentSymbol = true,
-			codeAction = true,
-			completion = true,
-		},
-		settings = {
-			languages = {
-				lua = { luacheck, stylua },
-				python = { flake8, black },
-				typescript = { eslint_d, prettier },
-				json = { prettierd },
-				jsonc = { eslint_d, fixjson },
-				sh = { shellcheck, shfmt },
-				javascript = { eslint_d, prettier },
-				javascriptreact = { eslint_d, prettier },
-				typescriptreact = { eslint_d, prettier },
-				svelte = { eslint_d, prettierd },
-				vue = { eslint_d, prettierd },
-				markdown = { prettierd },
-				docker = { hadolint, prettierd },
-				solidity = { solhint },
-				html = { prettierd },
-				css = { prettierd },
-				scss = { prettierd },
-				prisma = { prettier },
-			},
-		},
-	})
+  -- Emmet
+  vim.lsp.config("emmet_ls", {
+    filetypes = {
+      "html",
+      "typescriptreact",
+      "javascriptreact",
+      "javascript",
+      "typescript",
+      "css",
+      "sass",
+      "scss",
+      "less",
+      "svelte",
+      "vue",
+    },
+  })
+
+  -- TypeScript/JavaScript (ts_ls)
+  vim.lsp.config("ts_ls", {
+    filetypes = {
+      "typescript",
+      "typescriptreact",
+      "javascript",
+      "javascriptreact",
+    },
+    root_markers = { { "package.json", "tsconfig.json" }, ".git" },
+  })
+
+  -- ESLint LSP (Linting für JS/TS/React, abhängig von Projekt-ESLint-Config)
+  vim.lsp.config("eslint", {
+    root_markers = {
+      ".eslintrc",
+      ".eslintrc.js",
+      ".eslintrc.cjs",
+      ".eslintrc.json",
+      "package.json",
+    },
+  })
+
+  -- Docker
+  vim.lsp.config("dockerls", {})
+
+  -- Server aktivieren
+  vim.lsp.enable({
+    "lua_ls",
+    "prismals",
+    "angularls",
+    "cssls",
+    "html",
+    "jsonls",
+    "pyright",
+    "ruff_lsp",
+    "bashls",
+    "solidity",
+    "emmet_ls",
+    "ts_ls",
+    "eslint",
+    "dockerls",
+  })
 end
 
 return {
-	"neovim/nvim-lspconfig",
-	config = config,
-	lazy = false,
-	dependencies = {
-		"windwp/nvim-autopairs",
-		"williamboman/mason.nvim",
-		"creativenull/efmls-configs-nvim",
-		"hrsh7th/nvim-cmp",
-		"hrsh7th/cmp-buffer",
-		"hrsh7th/cmp-nvim-lsp",
-	},
+  "neovim/nvim-lspconfig",
+  config = config,
+  lazy = false,
+  dependencies = {
+    "windwp/nvim-autopairs",
+    "williamboman/mason.nvim",
+    "hrsh7th/nvim-cmp",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-nvim-lsp",
+  },
 }

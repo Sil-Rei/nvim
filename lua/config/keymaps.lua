@@ -46,3 +46,34 @@ keymap.set("n", "<leader>rs", ":LspRestart<CR>")
 
 -- Oil
 keymap.set("n", "<leader>ö", "<cmd>Oil<cr>")
+
+keymap.set("n", "<leader>r", function()
+  vim.cmd("wa")
+  local pane = vim.fn.system("wezterm cli get-pane-direction down"):gsub("%s+", "")
+  
+  if pane == "" then
+    vim.notify("Kein unterer Pane! Mach CMD+s für Split.", vim.log.levels.WARN)
+    return
+  end
+
+  local ft = vim.bo.filetype
+  local cmd = ""
+
+  if ft == "python" then
+    local filepath = vim.fn.expand("%:p")
+    cmd = string.format("clear && python3 %s", filepath)
+  elseif ft == "cpp" or ft == "c" then
+    cmd = "clear && cmake --build --preset dev && ./build/myapp"
+  elseif ft == "javascript" or ft == "typescript" then
+    local filepath = vim.fn.expand("%:p")
+    cmd = string.format("clear && node %s", filepath)
+  else
+    vim.notify("Kein Runner für Filetype: " .. ft, vim.log.levels.WARN)
+    return
+  end
+
+  vim.fn.system(string.format(
+    "wezterm cli send-text --pane-id %s --no-paste '%s\n'",
+    pane, cmd
+  ))
+end, { desc = "Smart Build & Run" })

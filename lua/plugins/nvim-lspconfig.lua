@@ -37,6 +37,23 @@ local config = function()
     end)(),
   })
 
+  -- C/C++ (clangd)
+  vim.lsp.config("clangd", {
+    cmd = {
+      "clangd",
+      "--background-index",
+      "--completion-style=detailed",
+      "--header-insertion=iwyu",
+      "--fallback-style=LLVM",
+      -- Optional: Pfad zur compile_commands.json automatisch erkennen:
+      -- "--compile-commands-dir=build"
+    },
+    root_markers = {
+      { "compile_commands.json", "CMakeLists.txt" },
+      ".git",
+    },
+  })
+
   -- lua_ls
   vim.lsp.config("lua_ls", {
     settings = {
@@ -58,9 +75,10 @@ local config = function()
     root_markers = { { "schema.prisma" }, ".git" },
   })
 
+
   -- Angular
   vim.lsp.config("angularls", {
-    filetypes = { "html" },
+		filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
     root_markers = { { "angular.json", "project.json" }, ".git" },
   })
 
@@ -116,55 +134,44 @@ local config = function()
     },
   })
 
-  -- TypeScript/JavaScript
-  vim.lsp.config("vtsls", {
-    filetypes = {
-      "typescript",
-      "typescriptreact",
-      "javascript",
-      "javascriptreact",
+-- TypeScript/JavaScript (Fallback: ts_ls)
+vim.lsp.config("ts_ls", {
+  filetypes = {
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
+  },
+  root_markers = {
+    { "pnpm-workspace.yaml", "yarn.workspaces.json", "package.json", "tsconfig.json" },
+    ".git",
+  },
+  settings = {
+    typescript = {
+      inlayHints = {
+        enumMemberValues = true,
+        functionLikeReturnTypes = true,
+        parameterNames = { enabled = "literals" },
+        parameterTypes = true,
+        propertyDeclarationTypes = true,
+        variableTypes = { enabled = "literals" },
+      },
+      preferences = {
+        includeCompletionsForModuleExports = true,
+        includeCompletionsWithInsertTextCompletions = true,
+        quoteStyle = "auto",
+        importModuleSpecifierPreference = "non-relative",
+      },
+      suggest = { completeFunctionCalls = true },
     },
-    root_markers = {
-      { "pnpm-workspace.yaml", "yarn.workspaces.json", "package.json", "tsconfig.json" },
-      ".git",
-    },
-    settings = {
-      vtsls = {
-        enableMoveToFileCodeAction = true,
-        autoUseWorkspaceTsdk = true,
-      },
-      typescript = {
-        inlayHints = {
-          enumMemberValues = true,
-          functionLikeReturnTypes = true,
-          parameterNames = { enabled = "literals" },
-          parameterTypes = true,
-          propertyDeclarationTypes = true,
-          variableTypes = { enabled = "literals" },
-        },
-        preferences = {
-          includeCompletionsForModuleExports = true,
-          includeCompletionsWithInsertTextCompletions = true,
-          quoteStyle = "auto",
-          importModuleSpecifierPreference = "non-relative",
-        },
-        suggest = {
-          completeFunctionCalls = true,
-        },
-      },
-      javascript = {
-        inlayHints = {
-          parameterNames = { enabled = "literals" },
-          parameterTypes = true,
-        },
-      },
-      tsserver = {
-        useSyntaxServer = "auto",
+    javascript = {
+      inlayHints = {
+        parameterNames = { enabled = "literals" },
+        parameterTypes = true,
       },
     },
-  })
-
-  -- ESLint
+  },
+})  -- ESLint
   vim.lsp.config("eslint", {
     root_markers = {
       ".eslintrc",
@@ -191,9 +198,10 @@ local config = function()
     "bashls",
     "solidity",
     "emmet_ls",
-    "vtsls",
+    "ts_ls",
     "eslint",
     "dockerls",
+    "clangd"
   })
 end
 

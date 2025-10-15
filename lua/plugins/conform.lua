@@ -6,13 +6,12 @@ return {
     format_on_save = function(_)
       return {
         timeout_ms = 400,
-        lsp_fallback = false, -- nur explizite Formatter verwenden
+        lsp_fallback = false,
       }
     end,
     formatters_by_ft = {
       lua = { "stylua" },
-      -- Python: nimm EINE Linie: ruff (schnell) ODER black (klassisch)
-      python = { "ruff_format", "ruff_organize_imports" }, -- oder { "black" }
+      python = {"black" },
       javascript = { "prettierd" },
       javascriptreact = { "prettierd" },
       typescript = { "prettierd" },
@@ -28,11 +27,20 @@ return {
       sh = { "shfmt" },
       markdown = { "prettierd" },
       prisma = { "prettierd" },
-      -- solidity/dockerfile haben meist keinen Auto-Formatter
+      c = { "clang_format" },
+      cpp = { "clang_format" },
+      objc = { "clang_format" },
+      objcpp = { "clang_format" },
+      cmake = { "cmake_format" }
     },
     formatters = {
       shfmt = { prepend_args = { "-i", "2", "-ci" } },
       stylua = { prepend_args = { "--indent-type", "Spaces", "--indent-width", "2" } },
+      clang_format = {
+        prepend_args = { "--style=file" },
+      },
+      cmake_format = {
+      },
     },
   },
 }

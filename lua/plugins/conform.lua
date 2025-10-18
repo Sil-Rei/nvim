@@ -19,6 +19,7 @@ return {
       json = { "prettierd" },
       jsonc = { "prettierd" },
       html = { "prettierd" },
+      htmlangular = { "prettierd" },
       css = { "prettierd" },
       scss = { "prettierd" },
       less = { "prettierd" },

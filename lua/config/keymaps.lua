@@ -1,4 +1,4 @@
-local keymap = vim.keymap 
+local keymap = vim.keymap
 
 ---------------------
 -- General Keymaps
@@ -50,7 +50,6 @@ keymap.set("n", "<leader>ö", "<cmd>Oil<cr>")
 keymap.set("n", "<leader>r", function()
   vim.cmd("wa")
   local pane = vim.fn.system("wezterm cli get-pane-direction down"):gsub("%s+", "")
-  
   if pane == "" then
     vim.notify("Kein unterer Pane! Mach CMD+s für Split.", vim.log.levels.WARN)
     return

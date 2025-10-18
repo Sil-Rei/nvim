@@ -121,6 +121,7 @@ local config = function()
   vim.lsp.config("emmet_ls", {
     filetypes = {
       "html",
+      "htmlangular",
       "typescriptreact",
       "javascriptreact",
       "javascript",

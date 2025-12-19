@@ -3,50 +3,80 @@ local keymap = vim.keymap
 ---------------------
 -- General Keymaps
 ---------------------
--- remap gg to go to first character of line at top of file
+-- GG/G Anpassungen
 keymap.set("n", "gg", "gg0")
--- remap G to go to last character of line at bottom of file
 keymap.set("n", "G", "G$")
 
--- remap ctrl d/u to center screen as well
+-- Zentriertes Scrollen
 keymap.set("n", "<C-u>", "<C-u>zz")
 keymap.set("n", "<C-d>", "<C-d>zz")
--- use jk to exit insert mode
+
+-- Exit Insert Mode
 keymap.set("i", "jk", "<ESC>")
 
--- Quit without saving
-keymap.set("n", "<leader><ESC>", ":qa!<CR>") -- Quit all without saving
+-- Quit all without saving
+keymap.set("n", "<leader><ESC>", ":qa!<CR>")
 keymap.set("v", "<leader><ESC>", "<Esc>:qa!<CR>", { desc = "Quit all without saving" })
 
--- quick save write file
+-- Quick save
 keymap.set("n", "<leader>w", ":w<CR>")
 
--- Indenting
+-- Indenting (bleibt im Visual Mode)
 keymap.set("v", "<", "<gv")
 keymap.set("v", ">", ">gv")
 
--- clear search highlights
+-- Clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>")
 
--- delete single character without copying into register
+-- Delete single character without register
 keymap.set("n", "x", '"_x')
 
--- increment/decrement numbers
-keymap.set("n", "<leader>+", "<C-a>") -- increment
-keymap.set("n", "<leader>-", "<C-x>") -- decrement
-----------------------
--- Plugin Keybinds
-----------------------
--- nvim-tree
--- keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true }) -- toggle file explorer
--- keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", { noremap = true, silent = true })
-
--- restart lsp server
-keymap.set("n", "<leader>rs", ":LspRestart<CR>")
+-- Increment/Decrement
+keymap.set("n", "<leader>+", "<C-a>")
+keymap.set("n", "<leader>-", "<C-x>")
 
 -- Oil
 keymap.set("n", "<leader>ö", "<cmd>Oil<cr>")
 
+-- Restart LSP
+keymap.set("n", "<leader>rs", ":LspRestart<CR>")
+
+---------------------
+-- LSP Keymaps (Ersetzt util/lsp.lua)
+---------------------
+-- Diese Maps sind jetzt global und nutzen direkt Snacks.picker
+local map = function(mode, lhs, rhs, desc)
+  keymap.set(mode, lhs, rhs, { silent = true, desc = desc })
+end
+
+map("n", "gd", function()
+  Snacks.picker.lsp_definitions()
+end, "Goto Definition")
+map("n", "gr", function()
+  Snacks.picker.lsp_references()
+end, "References")
+map("n", "gI", function()
+  Snacks.picker.lsp_implementations()
+end, "Implementations")
+map("n", "gy", function()
+  Snacks.picker.lsp_type_definitions()
+end, "Type Definitions")
+map("n", "K", vim.lsp.buf.hover, "Hover")
+map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
+map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
+
+-- Diagnostics
+map("n", "<leader>d", function()
+  vim.diagnostic.open_float(nil, { scope = "line", border = "rounded" })
+end, "Line Diagnostics")
+
+map("n", "<leader>sd", function()
+  Snacks.picker.diagnostics()
+end, "Diagnostics Picker")
+
+---------------------
+-- Smart Build & Run (Dein WezTerm Script)
+---------------------
 keymap.set("n", "<leader>r", function()
   vim.cmd("silent! wa")
   local pane = vim.fn.system("wezterm cli get-pane-direction down"):gsub("%s+", "")
@@ -78,8 +108,5 @@ keymap.set("n", "<leader>r", function()
     cmd = runner_cmd
   end
 
-  vim.fn.system(string.format(
-    "wezterm cli send-text --pane-id %s --no-paste '%s\n'",
-    pane, cmd
-  ))
+  vim.fn.system(string.format("wezterm cli send-text --pane-id %s --no-paste '%s\n'", pane, cmd))
 end, { desc = "Smart Build & Run in Wezterm" })

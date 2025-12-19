@@ -1,5 +1,3 @@
-local on_attach = require("util.lsp").on_attach
-
 local config = function()
   local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
   if not vim.env.PATH:find(mason_bin, 1, true) then
@@ -25,7 +23,6 @@ local config = function()
 
   -- Global defaults
   vim.lsp.config("*", {
-    on_attach = on_attach,
     capabilities = (function()
       local ok, blink = pcall(require, "blink.cmp")
       return ok and blink.get_lsp_capabilities() or nil

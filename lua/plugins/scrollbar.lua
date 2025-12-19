@@ -1,11 +1,11 @@
 return {
- "dstein64/nvim-scrollview",
-  lazy=false,
-  
+  "dstein64/nvim-scrollview",
+  event = "VeryLazy",
   config = function()
-  require('scrollview').setup({
-  excluded_filetypes = {'nvim-tree', "NvimTree"},
-  current_only = true,
-})
-  end
+    require("scrollview").setup({
+      excluded_filetypes = { "nvim-tree", "NvimTree", "dashboard", "alpha" },
+      current_only = true,
+      always_show = false,
+    })
+  end,
 }

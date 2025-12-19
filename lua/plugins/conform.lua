@@ -5,7 +5,7 @@ return {
   opts = {
     format_on_save = function(_)
       return {
-        timeout_ms = 400,
+        timeout_ms = 800,
         lsp_fallback = false,
       }
     end,

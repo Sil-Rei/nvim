@@ -1,7 +1,6 @@
 return {
   "Saghen/blink.cmp",
-  lazy = false,
-  priority = 1000,
+  event = { "InsertEnter", "CmdlineEnter" },
   version = "*",
   dependencies = {
     "rafamadriz/friendly-snippets",
@@ -34,11 +33,8 @@ return {
           border = "none",
         },
       },
-      -- Optional: wann das Menü automatisch erscheint (z. B. TelescopePrompt ausnehmen)
       menu = {
-        -- border = "rounded", -- oder "none"
         draw = {
-          -- Zwei Spalten: Icon + Label | Kind-Text rechts
           columns = {
             { "kind_icon", "label", gap = 1 },
             { "kind" },
@@ -75,18 +71,12 @@ return {
     sources = {
       default = { "lsp", "buffer", "path", "snippets" },
     },
-
-    -- schneller Matcher (Rust), mit Warnung falls Binary fehlt
     fuzzy = { implementation = "prefer_rust_with_warning" },
-
-    -- Experimentell, aber nice:
-    -- signature = { enabled = true, window = { border = "rounded" } },
   },
 
   config = function(_, opts)
     require("blink.cmp").setup(opts)
 
-    -- Farben/Highlights anpassen (nach deinem Colorscheme laden)
     local set_hl = vim.api.nvim_set_hl
     local has_base_bg = function()
       local ok, res = pcall(vim.api.nvim_get_hl, 0, { name = "Normal", link = false })

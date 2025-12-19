@@ -1,12 +1,12 @@
 local opt = vim.opt
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 -- hide mode change notification
 vim.opt.showmode = false
-vim.g.indent_blankline_filetype_exclude = { "dashboard" }
-
-vim.g.smart_splits_multiplexer_integration="wezterm"
--- hide end of file chars
-vim.opt.fillchars = {eob = " "}
+vim.o.laststatus = 3
+vim.opt.fillchars = { eob = " " }
+vim.g.smart_splits_multiplexer_integration = "wezterm"
 
 -- Tab / Indentation
 opt.tabstop = 2
@@ -35,7 +35,7 @@ opt.completeopt = "menuone,noinsert,noselect"
 opt.errorbells = false
 opt.swapfile = false
 opt.backup = false
-opt.undodir = vim.fn.expand("~/.vim/undodir")
+opt.undodir = vim.fn.stdpath("data") .. "/undo"
 opt.undofile = true
 opt.backspace = "indent,eol,start"
 opt.splitright = true
@@ -46,5 +46,4 @@ opt.mouse = "a"
 opt.clipboard = "unnamedplus"
 vim.o.laststatus = 3
 
-opt.guicursor =
-  "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250"
+opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250"

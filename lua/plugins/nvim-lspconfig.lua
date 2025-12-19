@@ -1,18 +1,13 @@
 local on_attach = require("util.lsp").on_attach
 
 local config = function()
-  pcall(function()
-    require("neoconf").setup({})
-  end)
+  local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
+  if not vim.env.PATH:find(mason_bin, 1, true) then
+    vim.env.PATH = mason_bin .. ":" .. vim.env.PATH
+  end
 
   -- Diagnostics
-  local signs = {
-    Error = "",
-    Warn = "",
-    Hint = "",
-    Info = "",
-  }
-
+  local signs = { Error = "", Warn = "", Hint = "", Info = "" }
   vim.diagnostic.config({
     signs = {
       text = {
@@ -28,13 +23,14 @@ local config = function()
     update_in_insert = false,
   })
 
-  -- Globale Defaults
+  -- Global defaults
   vim.lsp.config("*", {
     on_attach = on_attach,
     capabilities = (function()
       local ok, blink = pcall(require, "blink.cmp")
       return ok and blink.get_lsp_capabilities() or nil
     end)(),
+    root_markers = { ".git" },
   })
 
   -- C/C++ (clangd)
@@ -45,13 +41,8 @@ local config = function()
       "--completion-style=detailed",
       "--header-insertion=iwyu",
       "--fallback-style=LLVM",
-      -- Optional: Pfad zur compile_commands.json automatisch erkennen:
-      -- "--compile-commands-dir=build"
     },
-    root_markers = {
-      { "compile_commands.json", "CMakeLists.txt" },
-      ".git",
-    },
+    root_markers = { "compile_commands.json", "CMakeLists.txt", ".git" },
   })
 
   -- lua_ls
@@ -71,15 +62,15 @@ local config = function()
 
   -- Prisma
   vim.lsp.config("prismals", {
+    cmd = { "prisma-language-server", "--stdio" },
     filetypes = { "prisma" },
-    root_markers = { { "schema.prisma" }, ".git" },
+    root_markers = { "schema.prisma", ".git" },
   })
-
 
   -- Angular
   vim.lsp.config("angularls", {
-		filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
-    root_markers = { { "angular.json", "project.json" }, ".git" },
+    filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
+    root_markers = { "angular.json", "project.json", ".git" },
   })
 
   -- CSS / HTML / JSON
@@ -91,7 +82,9 @@ local config = function()
   vim.lsp.config("pyright", {
     settings = {
       pyright = {
-        disableOrganizeImports = false,
+        disableOrganizeImports = true, -- Ruff macht das besser
+      },
+      python = {
         analysis = {
           useLibraryCodeForTypes = true,
           autoSearchPaths = true,
@@ -102,13 +95,11 @@ local config = function()
     },
   })
 
-  -- Ruff
-  vim.lsp.config("ruff_lsp", {
-    init_options = {
-      settings = {
-        args = {},
-      },
-    },
+  -- Ruff (native server)
+  vim.lsp.config("ruff", {
+    cmd = { "ruff", "server" },
+    filetypes = { "python" },
+    root_markers = { "pyproject.toml", "ruff.toml", ".git" },
   })
 
   -- Bash
@@ -135,44 +126,49 @@ local config = function()
     },
   })
 
--- TypeScript/JavaScript (Fallback: ts_ls)
-vim.lsp.config("ts_ls", {
-  filetypes = {
-    "typescript",
-    "typescriptreact",
-    "javascript",
-    "javascriptreact",
-  },
-  root_markers = {
-    { "pnpm-workspace.yaml", "yarn.workspaces.json", "package.json", "tsconfig.json" },
-    ".git",
-  },
-  settings = {
-    typescript = {
-      inlayHints = {
-        enumMemberValues = true,
-        functionLikeReturnTypes = true,
-        parameterNames = { enabled = "literals" },
-        parameterTypes = true,
-        propertyDeclarationTypes = true,
-        variableTypes = { enabled = "literals" },
-      },
-      preferences = {
-        includeCompletionsForModuleExports = true,
-        includeCompletionsWithInsertTextCompletions = true,
-        quoteStyle = "auto",
-        importModuleSpecifierPreference = "non-relative",
-      },
-      suggest = { completeFunctionCalls = true },
+  -- TypeScript/JavaScript
+  vim.lsp.config("ts_ls", {
+    filetypes = {
+      "typescript",
+      "typescriptreact",
+      "javascript",
+      "javascriptreact",
     },
-    javascript = {
-      inlayHints = {
-        parameterNames = { enabled = "literals" },
-        parameterTypes = true,
+    root_markers = {
+      "pnpm-workspace.yaml",
+      "yarn.workspaces.json",
+      "package.json",
+      "tsconfig.json",
+      ".git",
+    },
+    settings = {
+      typescript = {
+        inlayHints = {
+          enumMemberValues = true,
+          functionLikeReturnTypes = true,
+          parameterNames = { enabled = "literals" },
+          parameterTypes = true,
+          propertyDeclarationTypes = true,
+          variableTypes = { enabled = "literals" },
+        },
+        preferences = {
+          includeCompletionsForModuleExports = true,
+          includeCompletionsWithInsertTextCompletions = true,
+          quoteStyle = "auto",
+          importModuleSpecifierPreference = "non-relative",
+        },
+        suggest = { completeFunctionCalls = true },
+      },
+      javascript = {
+        inlayHints = {
+          parameterNames = { enabled = "literals" },
+          parameterTypes = true,
+        },
       },
     },
-  },
-})  -- ESLint
+  })
+
+  -- ESLint
   vim.lsp.config("eslint", {
     root_markers = {
       ".eslintrc",
@@ -184,33 +180,35 @@ vim.lsp.config("ts_ls", {
   })
 
   -- Docker
-  vim.lsp.config("dockerls", {})
+  vim.lsp.config("dockerls", {
+    cmd = { "docker-langserver", "--stdio" },
+  })
 
-  -- Server aktivieren
+  -- Enable only what you want
   vim.lsp.enable({
     "lua_ls",
+    "clangd",
     "prismals",
+    "dockerls",
     "angularls",
     "cssls",
     "html",
     "jsonls",
     "pyright",
-    "ruff_lsp",
+    "ruff",
     "bashls",
     "solidity",
     "emmet_ls",
     "ts_ls",
     "eslint",
-    "dockerls",
-    "clangd"
   })
 end
 
 return {
   "neovim/nvim-lspconfig",
-  config = config,
-  lazy = false,
+  event = { "BufReadPre", "BufNewFile" },
   dependencies = {
-    "williamboman/mason.nvim",
+    { "williamboman/mason.nvim", config = true },
   },
+  config = config,
 }

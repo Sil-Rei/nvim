@@ -3,5 +3,5 @@ return {
 	opts = {
 
 	},
-	lazy = false,
+  event = "VeryLazy",
 }

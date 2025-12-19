@@ -38,8 +38,8 @@ keymap.set("n", "<leader>-", "<C-x>") -- decrement
 -- Plugin Keybinds
 ----------------------
 -- nvim-tree
-keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true }) -- toggle file explorer
-keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", { noremap = true, silent = true })
+-- keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true }) -- toggle file explorer
+-- keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", { noremap = true, silent = true })
 
 -- restart lsp server
 keymap.set("n", "<leader>rs", ":LspRestart<CR>")
@@ -48,31 +48,38 @@ keymap.set("n", "<leader>rs", ":LspRestart<CR>")
 keymap.set("n", "<leader>ö", "<cmd>Oil<cr>")
 
 keymap.set("n", "<leader>r", function()
-  vim.cmd("wa")
+  vim.cmd("silent! wa")
   local pane = vim.fn.system("wezterm cli get-pane-direction down"):gsub("%s+", "")
   if pane == "" then
-    vim.notify("Kein unterer Pane! Mach CMD+s für Split.", vim.log.levels.WARN)
+    vim.notify("Kein unterer Pane! Nutze CMD+s für Split.", vim.log.levels.WARN)
     return
   end
 
   local ft = vim.bo.filetype
   local cmd = ""
 
-  if ft == "python" then
-    local filepath = vim.fn.expand("%:p")
-    cmd = string.format("clear && python3 %s", filepath)
-  elseif ft == "cpp" or ft == "c" then
-    cmd = "clear && cmake --build --preset dev && ./build/myapp"
-  elseif ft == "javascript" or ft == "typescript" then
-    local filepath = vim.fn.expand("%:p")
-    cmd = string.format("clear && node %s", filepath)
-  else
+  local runners = {
+    python = "clear && python3 %s",
+    javascript = "clear && node %s",
+    typescript = "clear && node %s",
+    cpp = "clear && cmake --build --preset dev && ./build/myapp",
+    c = "clear && cmake --build --preset dev && ./build/myapp",
+  }
+
+  local runner_cmd = runners[ft]
+  if not runner_cmd then
     vim.notify("Kein Runner für Filetype: " .. ft, vim.log.levels.WARN)
     return
+  end
+
+  if ft == "python" or ft == "javascript" or ft == "typescript" then
+    cmd = string.format(runner_cmd, vim.fn.expand("%:p"))
+  else
+    cmd = runner_cmd
   end
 
   vim.fn.system(string.format(
     "wezterm cli send-text --pane-id %s --no-paste '%s\n'",
     pane, cmd
   ))
-end, { desc = "Smart Build & Run" })
+end, { desc = "Smart Build & Run in Wezterm" })

@@ -206,7 +206,7 @@ end
 
 return {
   "neovim/nvim-lspconfig",
-  event = { "BufReadPre", "BufNewFile" },
+  event = "User FileOpened",
   dependencies = {
     { "williamboman/mason.nvim", config = true },
   },

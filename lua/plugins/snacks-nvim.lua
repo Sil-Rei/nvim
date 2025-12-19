@@ -1,13 +1,14 @@
 return {
   "folke/snacks.nvim",
-  lazy = true,
   priority = 1000,
+  lazy = false,
   opts = {
     notifier = { enabled = true },
     quickfile = { enabled = true },
     indent = { enabled = true, animate = { enabled = false } },
     picker = { enabled = true },
-    dashboard = { enabled = false },
+    bigfile = { enabled = true },
+    input = { enabled = true },
   },
   keys = {
     {
@@ -45,7 +46,8 @@ return {
       end,
       desc = "Find Files",
     },
-    -- git
+
+    -- Git Picker
     {
       "<leader>gb",
       function()
@@ -61,25 +63,11 @@ return {
       desc = "Git Log",
     },
     {
-      "<leader>gL",
-      function()
-        Snacks.picker.git_log_line()
-      end,
-      desc = "Git Log Line",
-    },
-    {
       "<leader>gs",
       function()
         Snacks.picker.git_status()
       end,
       desc = "Git Status",
-    },
-    {
-      "<leader>gS",
-      function()
-        Snacks.picker.git_stash()
-      end,
-      desc = "Git Stash",
     },
     {
       "<leader>gd",
@@ -94,6 +82,21 @@ return {
         Snacks.picker.git_log_file()
       end,
       desc = "Git Log File",
+    },
+    {
+      "gd",
+      function()
+        Snacks.picker.lsp_definitions()
+      end,
+      desc = "Goto Definition",
+    },
+    {
+      "gr",
+      function()
+        Snacks.picker.lsp_references()
+      end,
+      nowait = true,
+      desc = "References",
     },
   },
 }

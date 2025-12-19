@@ -68,7 +68,6 @@ require("lazy").setup("plugins", {
   },
 })
 
-
 -- Highlight for Yanking
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking text",
@@ -78,5 +77,15 @@ vim.api.nvim_create_autocmd("TextYankPost", {
       higroup = "IncSearch",
       timeout = 150,
     })
+  end,
+})
+
+-- util for delaying lsp on oil start
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+  callback = function(args)
+    -- Wenn es keine Oil-Datei ist, feuere das "FileOpened" Event
+    if vim.bo[args.buf].filetype ~= "oil" then
+      vim.api.nvim_exec_autocmds("User", { pattern = "FileOpened" })
+    end
   end,
 })

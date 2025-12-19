@@ -1,6 +1,6 @@
 return {
   "nvim-lualine/lualine.nvim",
-  event = "VeryLazy",
+  event = "UIEnter",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
     local function fmt_mode(s)
@@ -128,8 +128,7 @@ return {
           },
           {
             function()
-              local buf_clients =
-                vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+              local buf_clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
               if next(buf_clients) == nil then
                 return ""
               end

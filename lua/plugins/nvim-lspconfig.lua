@@ -30,16 +30,53 @@ local config = function()
     root_markers = { ".git" },
   })
 
-  -- C/C++ (clangd)
+  -- C/C++ (clangd) - Optimized for Performance and DX
   vim.lsp.config("clangd", {
     cmd = {
       "clangd",
       "--background-index",
-      "--completion-style=detailed",
+      "--clang-tidy",
       "--header-insertion=iwyu",
-      "--fallback-style=LLVM",
+      "--completion-style=detailed",
+      "--function-arg-placeholders",
+      "--fallback-style=llvm",
+      "-j=4", -- Anzahl der Kerne für das Indexing
     },
-    root_markers = { "compile_commands.json", "CMakeLists.txt", ".git" },
+    root_markers = {
+      "compile_commands.json",
+      "compile_flags.txt",
+      ".clangd",
+      ".clang-format",
+      ".clang-tidy",
+      "CMakeLists.txt",
+      "Makefile",
+      "configure.ac",
+      ".git",
+    },
+    -- Wichtig für Inlay Hints in C++
+    settings = {
+      clangd = {
+        InlayHints = {
+          Designators = true,
+          Enabled = true,
+          ParameterNames = true,
+          DeducedTypes = true,
+        },
+        fallbackFlags = { "-std=c++20" },
+      },
+    },
+  })
+
+  vim.lsp.config("sourcekit", {
+    cmd = { "xcrun", "sourcekit-lsp" },
+    filetypes = { "swift", "objective-c", "objective-cpp" },
+    root_markers = {
+      "Package.swift",
+      "compile_commands.json",
+      "project.yml",
+      "Project.swift",
+      ".git",
+    },
   })
 
   -- lua_ls
@@ -79,7 +116,7 @@ local config = function()
   vim.lsp.config("pyright", {
     settings = {
       pyright = {
-        disableOrganizeImports = true, -- Ruff macht das besser
+        disableOrganizeImports = true,
       },
       python = {
         analysis = {
@@ -181,7 +218,7 @@ local config = function()
     cmd = { "docker-langserver", "--stdio" },
   })
 
-  -- Enable only what you want
+  -- Enable servers
   vim.lsp.enable({
     "lua_ls",
     "clangd",
@@ -198,14 +235,15 @@ local config = function()
     "emmet_ls",
     "ts_ls",
     "eslint",
+    "sourcekit",
   })
 end
 
 return {
   "neovim/nvim-lspconfig",
-  event = "User FileOpened",
+  event = { "BufReadPre", "BufNewFile" },
   dependencies = {
-    { "williamboman/mason.nvim", config = true },
+    "mason-org/mason.nvim",
   },
   config = config,
 }

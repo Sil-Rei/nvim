@@ -1,7 +1,6 @@
 return {
-  "williamboman/mason.nvim",
+  "mason-org/mason.nvim",
   cmd = "Mason",
-  event = "BufReadPre",
   opts = {
     ui = {
       icons = {
@@ -9,9 +8,6 @@ return {
         package_pending = "➜",
         package_uninstalled = "✗",
       },
-    },
-    registries = {
-      "github:mason-org/mason-registry",
     },
   },
 }

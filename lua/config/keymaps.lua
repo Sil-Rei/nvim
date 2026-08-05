@@ -77,36 +77,55 @@ end, "Diagnostics Picker")
 ---------------------
 -- Smart Build & Run (Dein WezTerm Script)
 ---------------------
-keymap.set("n", "<leader>r", function()
+vim.keymap.set("n", "<leader>r", function()
   vim.cmd("silent! wa")
+
+  -- Pane Check
   local pane = vim.fn.system("wezterm cli get-pane-direction down"):gsub("%s+", "")
   if pane == "" then
-    vim.notify("Kein unterer Pane! Nutze CMD+s für Split.", vim.log.levels.WARN)
+    vim.notify("Kein unterer Pane! Nutze CMD+S für Split.", vim.log.levels.WARN)
     return
   end
 
   local ft = vim.bo.filetype
   local cmd = ""
+  local filepath = vim.fn.expand("%:p")
+  local project_root = vim.fn.expand("%:p:h")
 
-  local runners = {
-    python = "clear && python3 %s",
-    javascript = "clear && node %s",
-    typescript = "clear && node %s",
-    cpp = "clear && cmake --build --preset dev && ./build/myapp",
-    c = "clear && cmake --build --preset dev && ./build/myapp",
-  }
+  -- Runner Logik
+  if ft == "python" then
+    cmd = string.format("clear && python3 '%s'", filepath)
+  elseif ft == "javascript" or ft == "typescript" then
+    -- Falls du ts-node oder bun nutzt, hier anpassen
+    cmd = string.format("clear && node '%s'", filepath)
+  elseif ft == "cpp" or ft == "c" then
+    -- Intelligenter C++ Build
+    if vim.fn.filereadable("CMakeLists.txt") == 1 then
+      -- Wir nehmen an, dass ein 'dev' preset existiert oder wir nutzen den Standard
+      -- Falls kein Preset da ist, kann man auch 'cmake --build build' nehmen
+      cmd = "clear && cmake --build --preset dev"
 
-  local runner_cmd = runners[ft]
-  if not runner_cmd then
+      -- Versuch das Binary zu finden: oft wie das Verzeichnis benannt
+      local binary = "./build/myapp" -- Dein Default
+      if vim.fn.isdirectory("build") == 1 then
+        cmd = cmd .. " && " .. binary
+      end
+    elseif vim.fn.filereadable("Makefile") == 1 then
+      cmd = 'clear && make -j$(nproc) && ./$(basename "$PWD")'
+    else
+      -- Single File Compile für kleine Uni-Aufgaben
+      local out = vim.fn.expand("%:r")
+      cmd = string.format("clear && g++ -std=c++20 '%s' -o '%s' && '%s'", filepath, out, out)
+    end
+  elseif ft == "sh" then
+    cmd = string.format("clear && bash '%s'", filepath)
+  end
+
+  if cmd == "" then
     vim.notify("Kein Runner für Filetype: " .. ft, vim.log.levels.WARN)
     return
   end
 
-  if ft == "python" or ft == "javascript" or ft == "typescript" then
-    cmd = string.format(runner_cmd, vim.fn.expand("%:p"))
-  else
-    cmd = runner_cmd
-  end
-
+  -- Abfahrt!
   vim.fn.system(string.format("wezterm cli send-text --pane-id %s --no-paste '%s\n'", pane, cmd))
 end, { desc = "Smart Build & Run in Wezterm" })
